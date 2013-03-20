@@ -1,5 +1,13 @@
 # Find and set Boost flags
 
+# also support duplicated boost installations - FindBoost.cmake does not use the
+# BOOST_ROOT directory correctly
+add_definitions(-DBOOST_ALL_NO_LIB)
+if(DEFINED ENV{BOOST_ROOT}) 
+   set(Boost_NO_SYSTEM_PATHS ON)
+endif()
+
+
 if(NOT PCL_SHARED_LIBS OR WIN32)
   set(Boost_USE_STATIC_LIBS ON)
   set(Boost_USE_STATIC ON)
