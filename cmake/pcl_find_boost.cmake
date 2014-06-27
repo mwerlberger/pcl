@@ -5,6 +5,8 @@
 add_definitions(-DBOOST_ALL_NO_LIB)
 if(DEFINED ENV{BOOST_ROOT}) 
    set(Boost_NO_SYSTEM_PATHS ON)
+elseif(DEFINED ENV{HOST_LIBS}) 
+   set(BOOST_ROOT "$ENV{HOST_LIBS}/boost")
 endif()
 
 
