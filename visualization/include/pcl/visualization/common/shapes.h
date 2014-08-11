@@ -41,9 +41,12 @@
 
 #include <pcl/ModelCoefficients.h>
 #include <pcl/point_cloud.h>
-#include <pcl/visualization/vtk.h>
 #include <pcl/visualization/eigen.h>
 #include <pcl/geometry/planar_polygon.h>
+
+template <typename T> class vtkSmartPointer;
+class vtkDataSet;
+class vtkUnstructuredGrid;
 
 /**
   * \file pcl/visualization/common/shapes.h
@@ -252,8 +255,6 @@ namespace pcl
       * \param[in] y_max is the maximum y value of the box
       * \param[in] z_min is the minimum z value of the box
       * \param[in] z_max is the maximum z value of the box
-      * \param[in] id the cube id/name (default: "cube")
-      * \param[in] viewport (optional) the id of the new viewport (default: 0)
       */
     PCL_EXPORTS vtkSmartPointer<vtkDataSet> 
     createCube (double x_min, double x_max,

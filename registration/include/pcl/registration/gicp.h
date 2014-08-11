@@ -122,7 +122,9 @@ namespace pcl
       /** \brief Provide a pointer to the input dataset
         * \param cloud the const boost shared pointer to a PointCloud message
         */
-      PCL_DEPRECATED (void setInputCloud (const PointCloudSourceConstPtr &cloud), "[pcl::registration::GeneralizedIterativeClosestPoint::setInputCloud] setInputCloud is deprecated. Please use setInputSource instead.");
+      PCL_DEPRECATED ("[pcl::registration::GeneralizedIterativeClosestPoint::setInputCloud] setInputCloud is deprecated. Please use setInputSource instead.")
+      void
+      setInputCloud (const PointCloudSourceConstPtr &cloud);
 
       /** \brief Provide a pointer to the input dataset
         * \param cloud the const boost shared pointer to a PointCloud message
@@ -142,6 +144,7 @@ namespace pcl
           input[i].data[3] = 1.0;
         
         pcl::IterativeClosestPoint<PointSource, PointTarget>::setInputSource (cloud);
+        input_covariances_.clear ();
         input_covariances_.reserve (input_->size ());
       }
 
@@ -152,6 +155,7 @@ namespace pcl
       setInputTarget (const PointCloudTargetConstPtr &target)
       {
         pcl::IterativeClosestPoint<PointSource, PointTarget>::setInputTarget(target);
+        target_covariances_.clear ();
         target_covariances_.reserve (target_->size ());
       }
 
@@ -229,19 +233,19 @@ namespace pcl
     protected:
 
       /** \brief The number of neighbors used for covariances computation. 
-        * \default 20
+        * default: 20
         */
       int k_correspondences_;
 
       /** \brief The epsilon constant for gicp paper; this is NOT the convergence 
         * tolerence 
-        * \default 0.001
+        * default: 0.001
         */
       double gicp_epsilon_;
 
       /** The epsilon constant for rotation error. (In GICP the transformation epsilon 
         * is split in rotation part and translation part).
-        * \default 2e-3
+        * default: 2e-3
         */
       double rotation_epsilon_;
 
@@ -277,7 +281,7 @@ namespace pcl
         * neighbors. K is set via setCorrespondenceRandomness() methode.
         * \param cloud pointer to point cloud
         * \param tree KD tree performer for nearest neighbors search
-        * \return cloud_covariance covariances matrices for each point in the cloud
+        * \param[out] cloud_covariances covariances matrices for each point in the cloud
         */
       template<typename PointT>
       void computeCovariances(typename pcl::PointCloud<PointT>::ConstPtr cloud, 

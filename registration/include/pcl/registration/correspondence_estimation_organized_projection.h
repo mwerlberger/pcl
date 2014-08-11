@@ -87,8 +87,8 @@ namespace pcl
         CorrespondenceEstimationOrganizedProjection ()
           : fx_ (525.f)
           , fy_ (525.f)
-          , cx_ (320.f)
-          , cy_ (240.f)
+          , cx_ (319.5f)
+          , cy_ (239.5f)
           , src_to_tgt_transformation_ (Eigen::Matrix4f::Identity ())
           , depth_threshold_ (std::numeric_limits<float>::max ())
           , projection_matrix_ (Eigen::Matrix3f::Identity ())
@@ -140,7 +140,7 @@ namespace pcl
         /** \brief Reads back the transformation from the source point cloud to the target point cloud.
           * \note The target point cloud must be in its local camera coordinates, so use this transformation to correct
           * for that.
-          * \param[out] src_to_tgt_transformation the transformation
+          * \return the transformation
           */
         inline Eigen::Matrix4f
         getSourceTransformation () const
@@ -158,23 +158,33 @@ namespace pcl
         /** \brief Reads back the depth threshold; after projecting the source points in the image space of the target
           * camera, this threshold is applied on the depths of corresponding dexels to eliminate the ones that are too
           * far from each other.
-          * \param[out] depth_threshold the depth threshold
+          * \return the depth threshold
           */
         inline float
         getDepthThreshold () const
         { return (depth_threshold_); }
 
         /** \brief Computes the correspondences, applying a maximum Euclidean distance threshold.
+          * \param correspondences
           * \param[in] max_distance Euclidean distance threshold above which correspondences will be rejected
           */
         void
         determineCorrespondences (Correspondences &correspondences, double max_distance);
 
         /** \brief Computes the correspondences, applying a maximum Euclidean distance threshold.
+          * \param correspondences
           * \param[in] max_distance Euclidean distance threshold above which correspondences will be rejected
           */
         void
         determineReciprocalCorrespondences (Correspondences &correspondences, double max_distance);
+        
+        /** \brief Clone and cast to CorrespondenceEstimationBase */
+        virtual boost::shared_ptr< CorrespondenceEstimationBase<PointSource, PointTarget, Scalar> > 
+        clone () const
+        {
+          Ptr copy (new CorrespondenceEstimationOrganizedProjection<PointSource, PointTarget, Scalar> (*this));
+          return (copy);
+        }
 
       protected:
         using CorrespondenceEstimationBase<PointSource, PointTarget, Scalar>::target_;
